@@ -33,7 +33,7 @@
               </a>
             </li>
              <li class="nav-item">
-              <a class="nav-link" href="main.php">
+              <a class="nav-link" href="encabezadosss.php">
                 <span data-feather="file"></span>
                 Main
               </a>
