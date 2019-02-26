@@ -12,11 +12,11 @@
   <link href="css/estilos.css" rel="stylesheet">
 </head>
 <body>
-  <?php require_once("navbar.php");   ?>
+  <?php require_once("navbar.php");?>
 
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="main">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">Usuarios</h1>
+          <h1 class="h2">Our Team</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
               <button type="button" class="btn btn-sm btn-outline-danger cancelar">Cancelar</button>
@@ -24,13 +24,14 @@
             </div>
           </div>
         </div>
-        <h2>Usuarios</h2>
+        <h2>Our Team</h2>
         <div class="table-responsive view" id="show_data">
-          <table class="table table-striped table-sm" id="list-usuarios">
+          <table class="table table-striped table-sm" id="list-ourteam">
             <thead>
               <tr>
+                <th>Ruta Imagen</th>
                 <th>Nombre</th>
-                <th>Teléfono</th>
+                <th>Cargo</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -42,22 +43,18 @@
             <div class="row">
               <div class="col">
                 <div class="form-group">
-                  <label for="nombre">Nombre</label>
-                  <input type="text" id="nombre" name="nombre" class="form-control">
+                  <label for="imagen">Ruta Imagen</label>
+                  <input type="text" id="imagen" name="imagen" class="form-control">
                 </div>
                 <div class="form-group">
-                  <label for="correo">Correo Electrónico</label>
-                  <input type="email" id="correo" name="correo" class="form-control">
+                  <label for="nombre">Nombre</label>
+                  <input type="text" id="nombre" name="nombre" class="form-control">
                 </div>
               </div>
               <div class="col">
                 <div class="form-group">
-                  <label for="telefono">Teléfono</label>
-                  <input type="tel" id="telefono" name="telefono" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="password">Contraseña</label>
-                  <input type="password" id="password" name="password" class="form-control">
+                  <label for="cargo">Cargo</label>
+                  <input type="text" id="cargo" name="cargo" class="form-control">
                 </div>
               </div>
             </div>
@@ -88,23 +85,24 @@
     }
     function consultar(){
       let obj = {
-        "accion" : "consultar_usuarios"
+        "accion" : "consultar_ourteam"
       };
       $.post("includes/_funciones.php", obj, function(respuesta){
         let template = ``;
         $.each(respuesta,function(i,e){
           template += `
           <tr>
-          <td>${e.nombre_usr}</td>
-          <td>${e.telefono_usr}</td>
+          <td>${e.img_our}</td>
+          <td>${e.nombre_our}</td>
+          <td>${e.cargo_our}</td>
           <td>
-          <a href="#" data-id="${e.id_usr}">Editar</a>
-          <a href="#" data-id="${e.id_usr}">Eliminar</a>
+          <a href="#" data-id="${e.id_our}">Editar</a>
+          <a href="#" data-id="${e.id_our}">Eliminar</a>
           </td>
           </tr>
           `;
         });
-        $("#list-usuarios tbody").html(template);
+        $("#list-ourteam tbody").html(template);
       },"JSON");
     }
     $(document).ready(function(){
@@ -116,16 +114,14 @@
     });
 
     $("#guardar_datos").click(function(guardar){
+      let imagen = $("#imagen").val();
       let nombre = $("#nombre").val();
-      let correo = $("#correo").val();
-      let telefono = $("#telefono").val();
-      let password = $("#password").val();
+      let cargo = $("#cargo").val();
       let obj ={
-        "accion" : "insertar_usuarios",
+        "accion" : "insertar_ourteam",
+        "imagen" : imagen,
         "nombre" : nombre,
-        "correo" : correo,
-        "password" : password,
-        "telefono" : telefono
+        "cargo" : cargo
       }
       $("#form_data").find("input").each(function(){
         $(this).removeClass("has-error");
@@ -138,10 +134,10 @@
       });
       $.post("includes/_funciones.php", obj, function(verificado){ 
       if (verificado != "" ) {
-       alert("Usuario Registrado");
+       alert("Team Member Registrado");
         }
       else {
-        alert("Usuario NO Registrado");
+        alert("Team Member NO Registrado");
       } 
      }
      );

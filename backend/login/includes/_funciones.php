@@ -10,6 +10,18 @@ switch ($_POST["accion"]) {
 	case 'insertar_usuarios':
 	insertar_usuarios();
 	break;
+	case 'consultar_works':
+	consultar_works();
+	break;
+	case 'insertar_works':
+	insertar_works();
+	break;
+	case 'consultar_ourteam':
+	consultar_ourteam();
+	break;
+	case 'insertar_ourteam':
+	insertar_ourteam();
+	break;
 	default:
 	break;
 }
@@ -38,6 +50,55 @@ function insertar_usuarios(){
 	echo json_encode($arregloin); //Imprime el JSON ENCODEADO
 }
 
+/////WORKS
+function consultar_works(){
+	global $mysqli;
+	$consulta = "SELECT * FROM works";
+	$resultado = mysqli_query($mysqli, $consulta);
+	$arreglo = [];
+	while($fila = mysqli_fetch_array($resultado)){
+		array_push($arreglo, $fila);
+	}
+	echo json_encode($arreglo); //Imprime el JSON ENCODEADO
+}
+function insertar_works(){
+	global $mysqli;
+	$img_wo = $_POST["imagen"];
+	$proyect_name_wo = $_POST["proyecto"];	
+	$website_design_wo = $_POST["website"];	
+	$consultain = "INSERT INTO works VALUES('','$img_wo','$proyect_name_wo','$website_design_wo')";
+	$resultadoin = mysqli_query($mysqli, $consultain);
+	$arregloin = [];
+	while($filain = mysqli_fetch_array($resultadoin)){
+		array_push($arregloin, $filain);
+	}
+	echo json_encode($arregloin); //Imprime el JSON ENCODEADO
+}
+
+/////OURTEAM
+function consultar_ourteam(){
+	global $mysqli;
+	$consulta = "SELECT * FROM ourteam";
+	$resultado = mysqli_query($mysqli, $consulta);
+	$arreglo = [];
+	while($fila = mysqli_fetch_array($resultado)){
+		array_push($arreglo, $fila);
+	}
+	echo json_encode($arreglo); //Imprime el JSON ENCODEADO
+}
+function insertar_ourteam(){
+	global $mysqli;
+	$img_our = $_POST["imagen"];
+	$nombre_our = $_POST["nombre"];	
+	$cargo_our = $_POST["cargo"];	
+	$consultain = "INSERT INTO ourteam VALUES('','$img_our','$nombre_our','$cargo_our')";
+	$resultadoin = mysqli_query($mysqli, $consultain);
+	$arregloin = [];
+	while($filain = mysqli_fetch_array($resultadoin)){
+		array_push($arregloin, $filain);
+	}
+	echo json_encode($arregloin); //Imprime el JSON ENCODEADO
+}
 	function login(){
 		global $mysqli;
 		// Conectar a Base de Datos.
