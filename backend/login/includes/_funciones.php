@@ -22,8 +22,24 @@ switch ($_POST["accion"]) {
 	case 'insertar_ourteam':
 	insertar_ourteam();
 	break;
+	case 'eliminar_registro':
+	eliminar_usuarios($_POST["registro"]);
+	break;
 	default:
 	break;
+
+	}
+function eliminar_usuarios($id){
+	global $mysqli;
+	$consulta = "DELETE FROM usuarios WHERE id_usr = $id";
+	$resultado = mysqli_query($mysqli, $consulta);
+	//print_r($resultado);
+	if($resultado){
+		echo "Se elimino correctamente";
+	}else{
+echo "SE genero un error,intenta nuevamente";
+
+	}
 }
 function consultar_usuarios(){
 	global $mysqli;

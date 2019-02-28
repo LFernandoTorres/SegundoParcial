@@ -33,9 +33,9 @@
               </a>
             </li>
              <li class="nav-item">
-              <a class="nav-link" href="encabezadosss.php">
+              <a class="nav-link" href="encabezados.php">
                 <span data-feather="file"></span>
-                Main
+                Encabezado
               </a>
             </li>
             <li class="nav-item">

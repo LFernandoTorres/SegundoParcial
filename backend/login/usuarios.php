@@ -98,8 +98,8 @@
           <td>${e.nombre_usr}</td>
           <td>${e.telefono_usr}</td>
           <td>
-          <a href="#" data-id="${e.id_usr}">Editar</a>
-          <a href="#" data-id="${e.id_usr}">Eliminar</a>
+          <a href="#" data-id="${e.id_usr}" class="editar_registro">Editar</a>
+          <a href="#" data-id="${e.id_usr}" class="eliminar_registro">Eliminar</a>
           </td>
           </tr>
           `;
@@ -146,6 +146,31 @@
      }
      );
     });
+$("#main").on("click",".eliminar_registro",function(e){
+e.preventDefault();
+let confirmacion = confirm("Desea eliminar esta variable");
+if(confirmacion){
+let id = $(this).data('id');
+obj = {
+  "accion" : "eliminar_registro",
+  "registro" : id
+};
+$.post("includes/_funciones.php", obj, function(respuesta){
+alert(respuesta);
+consultar();
+});
+
+
+}else{
+  alert("El registro no se esta eliminado");
+}
+
+
+});
+
+
+
+
 
     $("#main").find(".cancelar").click(function(){
       change_view();
