@@ -39,7 +39,7 @@
           </table>
         </div>
         <div id="insert_data" class="view">
-          <form action="#" id="form_data">
+         <form action="#" id="form_data" enctype="multipart/form_data" >
             <div class="row">
               <div class="col">
                 <div class="form-group">
@@ -58,6 +58,12 @@
                 </div>
               </div>
             </div>
+            <div class="form-group">
+                  <input type="file" name="foto" id="foto">
+                  <input type="hidden" name="ruta" id="ruta" readonly="readonly">
+                </div>
+                <div id="preview"></div>
+              </div>
             <div class="row">
               <div class="col">
                 <button type="button" class="btn btn-success" id="guardar_datos">Guardar</button>
@@ -75,10 +81,12 @@
   <script>
     function change_view(vista = 'show_data'){
       $("#main").find(".view").each(function(){
+        // $(this).addClass("d-none");
         $(this).slideUp('fast');
         let id = $(this).attr("id");
         if(vista == id){
           $(this).slideDown(300);
+          // $(this).removeClass("d-none");
         }
       });
 
@@ -96,8 +104,8 @@
           <td>${e.proyect_name_wo}</td>
           <td>${e.website_design_wo}</td>
           <td>
-          <a href="#" data-id="${e.id_wo}">Editar</a>
-          <a href="#" data-id="${e.id_wo}">Eliminar</a>
+          <a href="#" data-id="${e.id_wo}"class="ceditar_works">Editar</a>
+          <a href="#" data-id="${e.id_wo}"class="eliminar_works">Eliminar</a>
           </td>
           </tr>
           `;
@@ -114,9 +122,11 @@
     });
 
     $("#guardar_datos").click(function(guardar){
+     // Funcion para guardar Datos
       let imagen = $("#imagen").val();
       let proyecto = $("#proyecto").val();
       let website = $("#website").val();
+      // Inicializar el objetos
       let obj ={
         "accion" : "insertar_works",
         "imagen" : imagen,
@@ -132,20 +142,98 @@
           return false;
         }
       });
+      if($(this).data("editar") == 1){
+          obj["accion"] = "editar_works";
+          obj["id"] = $(this).data("id");
+          $(this).text("Guardar").data("editar",0);
+          $("#form_data")[0].reset();
+      }
+
       $.post("includes/_funciones.php", obj, function(verificado){ 
-      if (verificado != "" ) {
-       alert("Work Registrado");
-        }
-      else {
-        alert("Work NO Registrado");
+       alert(verificado);
+       if (verificado == "Se inserto el Work en la BD ") {
+          change_view();
+          consultar();
+         }
+        if (verificado == "Se edito el Work correctamente") {
+            change_view();
+            consultar();
       } 
      }
      );
+    });
+//** ELIMINAR REGISTRO **//
+$("#main").on("click",".eliminar_works",function(e){
+e.preventDefault();
+let confirmacion = confirm("Desea eliminar esta variable");
+if(confirmacion){
+let id = $(this).data('id');
+obj = {
+  "accion" : "eliminar_works",
+  "id" : id
+};
+$.post("includes/_funciones.php", obj, function(respuesta){
+alert(respuesta);
+consultar();
+});
+
+
+}else{
+  alert("El registro no se esta eliminado");
+}
+
+
+});
+
+//** EDITAR **//
+    $('#list-usuarios').on("click",".ceditar_works", function(e){
+        e.preventDefault();
+    let id = $(this).data('id');
+         obj = {
+      "accion" : "ceditar_works",
+      "id" : id
+    };
+    $("#form_data")[0].reset();
+    change_view('insert_data');
+    $("#guardar_datos").text("Editar").data("editar",1).data("id", id);
+    $.post('includes/_funciones.php', obj, function(r){
+      $("#img_wo").val(r.img_wo);
+      $("#proyect_name_wo").val(r.proyect_name_wo);
+      $("#website_design_wo").val(r.website_design_wo);   
+        }, "JSON");
+
+        consultar();          
+            });
+    ///// FUNCTION PHOTO  //////
+    $("#foto").on("change", function (e) {
+      let formDatos = new FormData($("#form_data")[0]);
+      formDatos.append("accion", "carga_foto");
+      $.ajax({
+        url: "includes/_funciones.php",
+        type: "POST",
+        data: formDatos,
+        contentType: false,
+        processData: false,
+        success: function (datos) {
+          let respuesta = JSON.parse(datos);
+          if(respuesta.status == 0){
+            alert("No se cargó la foto");
+          }
+          let template = `
+          <img src="${respuesta.archivo}" alt="" class="img-fluid" />
+          `;
+          $("#ruta").val(respuesta.archivo);
+          $("#preview").html(template);
+        }
+      });
     });
 
     $("#main").find(".cancelar").click(function(){
       change_view();
       $("#form_data")[0].reset();
+            if ($("#guardar_datos").data("editar") == 1) {
+        $("#guardar_datos").text("Guardar").data("editar",0);
+      }
     });
   </script>
 </body>
