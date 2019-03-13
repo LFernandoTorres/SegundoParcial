@@ -74,7 +74,7 @@ switch ($_POST["accion"]) {
 	eliminar_works($_POST["id"]);
 	break;
 	case 'ceditar_works':
-	ceditar_features($_POST["id"]);
+	ceditar_works($_POST["id"]);
 	break;
 	case 'editar_works':
 	editar_works($_POST["id"]);
